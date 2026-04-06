@@ -20,7 +20,8 @@ A full-stack e-commerce platform for baby products built for **COS2204: Web Prog
 
 1. **Install dependencies:**
 ```bash
-$ npm install```
+$ npm install
+```
 
 ## 🚀 Upcoming Features (Technical Roadmap)
 
