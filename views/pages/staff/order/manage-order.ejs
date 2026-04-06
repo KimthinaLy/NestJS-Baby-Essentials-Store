@@ -1,0 +1,114 @@
+<%- include('../../../partials/staff_shell_top', { title: 'Orders' }) %>
+
+  <main class="container mx-auto px-8 pt-8 pb-12 min-h-screen">
+    <div class="max-w-screen mx-auto px-8">
+
+      <div class="flex items-center justify-between mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3 ">
+          <i class="pi pi-history text-indigo-500"></i>
+          Order History
+        </h1>
+        <span class="bg-indigo-100 text-indigo-700 px-4 py-1 rounded-full text-sm font-medium whitespace-nowrap">
+          Total Orders: <%= orders.length %>
+        </span>
+      </div>
+
+      <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-x-auto">
+        <table class="w-full text-left border-collapse min-w-[800px]">
+          <thead>
+            <tr class="bg-slate-50 border-b border-slate-100">
+              <th class="w-[10%] px-6 py-4 text-sm font-bold text-gray-600 uppercase whitespace-nowrap">#</th>
+              <th class="w-[10%] px-2 py-4 text-sm font-bold text-gray-600 uppercase whitespace-nowrap">Order ID</th>
+              <th class="w-[15%] px-2 py-4 text-sm font-bold text-gray-600 uppercase whitespace-nowrap">Date</th>
+              <th class="w-[15%] px-2 py-4 text-sm font-bold text-gray-600 uppercase">Amount</th>
+              <th class="w-[15%] px-2 py-4 text-sm font-bold text-gray-600 uppercase whitespace-nowrap">Order Status</th>
+              <th class="w-[15%] px-2 py-4 text-sm font-bold text-gray-600 uppercase whitespace-nowrap">Payment Status</th>
+              <th class="w-[20%] px-2 py-4 text-sm font-bold text-gray-600 uppercase text-center whitespace-nowrap">
+                Action</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-50">
+            <% if (orders && orders.length> 0) { %>
+              <% orders.forEach((order, i)=> { %>
+                <tr class="hover:bg-indigo-50/30 transition-colors">
+                  <td class="px-6 py-5 text-gray-500 font-medium">
+                    <%= i + 1 %>
+                  </td>
+                  <td class="px-2 py-5">
+                    <span class="font-mono text-sm text-indigo-600 font-semibold">#<%= order.order_id %></span>
+                  </td>
+                  <td class="px-2 py-5 text-gray-600 text-sm">
+                    <%= new Date(order.order_date).toLocaleDateString() %>
+                  </td>
+                  <td class="px-2 py-5 font-bold text-gray-900">
+                    $<%= parseFloat(order.total_amount).toFixed(2) %>
+                  </td>
+                  <form action="/orders/update/<%= order.order_id %>" method="POST">
+                    <td class="px-2 py-5">
+                      <select name="orderStatus"
+                        class="bg-slate-50 border border-slate-200 text-gray-700 text-xs rounded-xl focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2 font-bold">
+                        <option value="PENDING" <%=order.order_status==='PENDING' ? 'selected' : '' %>>PENDING</option>
+                        <option value="PROCESSING" <%=order.order_status==='PROCESSING' ? 'selected' : '' %>>PROCESSING
+                        </option>
+                        <option value="SHIPPED" <%=order.order_status==='SHIPPED' ? 'selected' : '' %>>SHIPPED</option>
+                        <option value="COMPLETED" <%=order.order_status==='COMPLETED' ? 'selected' : '' %>>COMPLETED
+                        </option>
+                        <option value="CANCELLED" <%=order.order_status==='CANCELLED' ? 'selected' : '' %>>CANCELLED
+                        </option>
+                      </select>
+                    </td>
+
+                    <td class="px-2 py-5">
+                      <select name="paymentStatus"
+                        class="bg-slate-50 border border-slate-200 text-gray-700 text-xs rounded-xl focus:ring-indigo-500 focus:border-indigo-500 block w-full p-2 font-bold">
+                        <option value="PAID" <%=order.payment_status==='PAID' ? 'selected' : '' %>>PAID</option>
+                        <option value="UNPAID" <%=order.payment_status==='UNPAID' ? 'selected' : '' %>>UNPAID
+                        </option>
+                      </select>
+                    </td>
+
+                    
+
+                    <td class="px-2 py-5 text-center">
+                      <div class="flex items-center justify-center gap-3">
+                        <button type="submit" title="Update Status"
+                          class="p-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors">
+                          <i class="pi pi-save text-xs"></i>
+                        </button>
+                  </form>
+
+                  <a href="/orders/<%= order.order_id %>/staff" title="View Details"
+                    class="p-2 bg-slate-100 text-slate-600 rounded-lg hover:bg-slate-200">
+                    <i class="pi pi-eye text-xs"></i>
+                  </a>
+
+                  <% if (order.order_status==='COMPLETED' || order.order_status==='CANCELLED' ) { %>
+                    <form action="/orders/delete/<%= order.order_id %>" method="POST"
+                      onsubmit="return confirm('Delete this record forever?')">
+                      <button type="submit" class="p-2 bg-pink-50 text-pink-600 rounded-lg hover:bg-pink-100">
+                        <i class="pi pi-trash text-xs"></i>
+                      </button>
+                    </form>
+                    <% } %>
+
+                    </div>
+      </td>
+      </tr>
+      <% }) %>
+        <% } else { %>
+          <tr>
+            <td colspan="7" class="px-6 py-20 text-center">
+              <div class="flex flex-col items-center">
+                <p class="text-gray-400">No orders yet.</p>
+              </div>
+            </td>
+          </tr>
+          <% } %>
+            </tbody>
+            </table>
+    </div>
+
+    </div>
+  </main>
+
+  <%- include('../../../partials/staff_shell_bottom', { title: 'Create Product' }) %>

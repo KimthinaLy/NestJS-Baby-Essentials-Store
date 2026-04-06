@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../partials/header_meta')%>
+</head>
+
+<body>
+  <%- include('../partials/header') %>
+    <main class="flex-grow flex items-center min-h-95">
+      <div class="container mx-auto px-6 py-16 lg:flex lg:items-center lg:gap-12">
+
+        <div class="lg:w-1/2 text-center lg:text-left">
+          <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-6">
+            Baby <span class="text-indigo-600">Essential</span>
+          </h1>
+
+          <p class="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto lg:mx-0">
+            Your trusted baby store for everyday essentials, comfort, and care.
+            Discover quality products for your little one, from feeding and clothing
+            to toys and nursery needs, all in one place.
+          </p>
+
+          <div class="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
+            <a href="/products"
+              class="px-8 py-4 bg-indigo-600 text-white font-bold rounded-full shadow-lg hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-300 text-center">
+              Shop All Products
+            </a>
+          </div>
+        </div>
+
+        <div class="hidden lg:block lg:w-1/2">
+          <div class="relative">
+            <div
+              class="absolute -top-10 -left-10 w-72 h-72 bg-indigo-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob">
+            </div>
+            <div
+              class="absolute -bottom-10 -right-10 w-72 h-72 bg-pink-100 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000">
+            </div>
+
+            <img src="/images/hero.png" alt="Happy Baby"
+              class="relative rounded-2xl shadow-2xl w-full h-[500px] object-cover transform hover:scale-[1.02] transition-transform duration-500">
+          </div>
+        </div>
+
+      </div>
+    </main>
+    <%- include('../partials/footer') %>
+</body>
+
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../../partials/header_meta', { title: 'Create Account' }) %>
+    <script defer src="https://unpkg.com/@alpinejs/mask@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body>
+  <div class="min-h-screen bg-slate-50 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="sm:mx-auto sm:w-full sm:max-w-md">
+      <h1 class="text-center text-4xl font-black text-indigo-600 italic">Baby Essentials</h1>
+      <h2 class="mt-6 text-center text-3xl font-extrabold text-slate-900">Welcome Back</h2>
+    </div>
+
+    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+      <div class="bg-white py-10 px-10 shadow-xl rounded-3xl border border-slate-100">
+
+        <% if (typeof success !=='undefined' && success==='account_created' ) { %>
+          <div
+            class="mb-6 p-4 bg-emerald-50 border-l-4 border-emerald-500 text-emerald-700 text-sm rounded-r-lg shadow-sm">
+            <div class="flex items-center gap-2">
+              <i class="pi pi-check-circle text-emerald-500"></i>
+              <p class="font-bold">Welcome to the family!</p>
+            </div>
+            <p class="mt-1">Your account has been created successfully. Please log in below.</p>
+          </div>
+          <% } %>
+
+            <% if (typeof error !== 'undefined' && error) { %>
+              <div class="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 text-sm rounded-r-lg">
+                <p class="font-bold">Login Failed</p>
+                <p><%= error === 'invalid_credentials' ? 'The email or password you entered is incorrect.' : error %></p>
+              </div>
+              <% } %>
+
+                <form action="/auth/login" method="POST" class="space-y-6">
+                  <div>
+                    <label class="block text-sm font-semibold text-slate-600 mb-1">Email address</label>
+                    <input type="email" name="email" required
+                      class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                  </div>
+
+                  <div>
+                    <label class="block text-sm font-semibold text-slate-600 mb-1">Password</label>
+                    <input type="password" name="password" required
+                      class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:ring-2 focus:ring-indigo-500 outline-none transition-all">
+                  </div>
+
+                  <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                      <input id="remember-me" name="remember-me" type="checkbox"
+                        class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-slate-300 rounded">
+                      <label for="remember-me" class="ml-2 block text-sm text-slate-600">Remember me</label>
+                    </div>
+                    <div class="text-sm">
+                      <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+                    </div>
+                  </div>
+
+                  <div>
+                    <button type="submit"
+                      class="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-2xl shadow-lg text-base font-bold text-white bg-indigo-600 hover:bg-indigo-700 transition-all transform active:scale-95 shadow-indigo-100">
+                      Sign In
+                    </button>
+                  </div>
+                </form>
+
+                <div class="mt-8">
+                  <div class="relative">
+                    <div class="absolute inset-0 flex items-center">
+                      <div class="w-full border-t border-slate-100"></div>
+                    </div>
+                    <div class="relative flex justify-center text-sm">
+                      <span class="px-2 bg-white text-slate-400 font-medium">New to Baby Essentials?</span>
+                    </div>
+                  </div>
+
+                  <div class="mt-6">
+                    <a href="/auth/register"
+                      class="w-full flex justify-center py-3 px-4 border-2 border-slate-100 rounded-2xl text-sm font-bold text-slate-600 hover:bg-slate-50 transition-all">
+                      Create an Account
+                    </a>
+                  </div>
+                </div>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <%- include('../../../partials/header_meta')%>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+</head>
+
+<body class="bg-gray-100" x-data="{ isOpen: false }">
+  <%- include('../../../partials/header') %>
+    <div class="md:hidden bg-white shadow-sm p-4 flex justify-between items-center sticky top-16 z-50">
+      <span class="font-bold text-indigo-600 uppercase">Baby Essentials</span>
+
+      <button @click="isOpen = !isOpen"
+        class="p-2 text-slate-600 focus:outline-none hover:text-indigo-600 transition-colors">
+        <i class="pi" :class="isOpen ? 'pi-times' : 'pi-bars'" style="font-size: 1.5rem"></i>
+      </button>
+    </div>
+
+    <div class="container mx-auto py-8 flex md:flex-row gap-8 px-4">
+
+      <aside :class="isOpen ? 'block' : 'hidden'" class="md:block w-full md:w-64 flex-shrink-0">
+        <div
+          class="bg-white p-6 rounded-lg shadow-sm sticky top-24 md:top-8 max-h-[calc(95vh-4rem)] overflow-y-auto custom-scrollbar">
+
+          <h2 class="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">
+            Categories
+          </h2>
+          <ul class="space-y-2 mb-8">
+            <li>
+              <a href="/products"
+                class="block py-2 px-3 rounded-md hover:bg-indigo-50 hover:text-indigo-600 transition text-gray-700">
+                All Products
+              </a>
+            </li>
+            <% categories.forEach(cat=> { %>
+              <li>
+                <a @click="isOpen = false" href="/categories/<%=cat.categoryName%>/products"
+                  class="block py-2 px-3 rounded-md hover:bg-indigo-50 hover:text-indigo-600 transition text-gray-700">
+                  <%= cat.categoryName %>
+                </a>
+              </li>
+              <% }) %>
+          </ul>
+
+          <h2 class="text-sm font-bold uppercase tracking-widest text-gray-500 mb-4">
+            Shop by Occasion
+          </h2>
+          <ul class="space-y-2">
+            <% occasions.forEach(occasion=>{ %>
+              <li>
+                <a @click="isOpen = false" href="/occasions/<%=occasion.name%>/products"
+                  class="block py-2 px-3 rounded-md hover:bg-indigo-50 hover:text-indigo-600 transition text-gray-700">
+                  <%= occasion.name %>
+                </a>
+              </li>
+              <% }) %>
+          </ul>
+        </div>
+      </aside>
+
+      <main class="flex-1">
+        <header class="mb-8">
+          <h1 id="title" class="text-3xl font-bold text-gray-900">
+            <%= title %>
+          </h1>
+        </header>
+
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <% if (products && products.length> 0) { %>
+            <% products.forEach(product=> { %>
+              <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div class="aspect-square overflow-hidden bg-gray-200">
+                  <img src="<%= product.imageData %>" alt="<%= product.name %>"
+                    class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-5">
+                  <h2 class="text-lg font-semibold text-gray-900 truncate">
+                    <%= product.name %>
+                  </h2>
+                  <div class="flex justify-between items-center mt-4">
+                    <span class="text-xl font-bold text-indigo-600">$<%= product.price %></span>
+                  </div>
+                  <form action="/cart/add" method="POST" class="mt-5">
+                    <input type="hidden" name="productId" value="<%= product.id %>">
+                    <button type="submit"
+                      class="w-full text-center bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 transition-all font-bold">
+                      Add to Cart
+                    </button>
+                  </form>
+                </div>
+              </div>
+              <% }) %>
+                <% } else { %>
+                  <div class="col-span-full p-12 text-center text-gray-400">No products found.</div>
+                  <% } %>
+        </div>
+
+      </main>
+    </div>
+
+    <%- include('../../../partials/footer') %>
+
+
+      <script>
+        const searchInput = document.getElementById('searchBar');
+        const productGrid = document.getElementById('productGrid');
+        const searchForm = document.getElementById('searchForm');
+
+        // Debounce function to wait until user stops typing
+        let timeout = null;
+
+        async function performAjaxSearch(query) {
+          const titleElement = document.getElementById('title');
+          if (titleElement) {
+            titleElement.innerText = query ? `Results for "${query}"` : 'All Products';
+          }
+          try {
+            const response = await fetch(`/products?search=${query}&ajax=true`);
+            const data = await response.json();
+
+            productGrid.innerHTML = '';
+
+            if (data.products.length > 0) {
+              // 3. Loop through products and build HTML
+              data.products.forEach(product => {
+                const productHTML = `
+              <div class="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
+                <div class="aspect-square overflow-hidden bg-gray-200">
+                  <img src="${product.imageData}" alt="${product.name}" 
+                       class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-500">
+                </div>
+                <div class="p-5">
+                  <h2 class="text-lg font-semibold text-gray-900 truncate">${product.name}</h2>
+                  <div class="flex justify-between items-center mt-4">
+                    <span class="text-xl font-bold text-indigo-600">$${product.price}</span>
+                  </div>
+                  <form action="/cart/add" method="POST" class="mt-5">
+                    <input type="hidden" name="productId" value="${product.id}">
+                    <button type="submit" class="w-full text-center bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700 font-bold">
+                      Add to Cart
+                    </button>
+                  </form>
+                </div>
+              </div>`;
+                productGrid.insertAdjacentHTML('beforeend', productHTML);
+              });
+            } else {
+              productGrid.innerHTML = '<div class="col-span-full p-12 text-center text-gray-400">No products found.</div>';
+            }
+          } catch (err) {
+            console.error('Search failed:', err);
+          }
+        }
+
+        searchInput.addEventListener('input', (e) => {
+          clearTimeout(timeout);
+          timeout = setTimeout(() => performAjaxSearch(e.target.value), 300); // Wait 300ms after last keystroke
+        });
+
+        searchForm.addEventListener('submit', (e) => {
+          e.preventDefault(); // Stop page refresh
+          performAjaxSearch(searchInput.value);
+        });
+      </script>
+</body>
+
+</html>

@@ -1,0 +1,58 @@
+<header class="fixed top-0 left-0 right-0 bg-white shadow-md z-50 h-16">
+  <div class="container mx-auto px-4 h-full flex items-center justify-between">
+
+    <div class="flex items-center gap-6">
+      <a href="/" class="flex items-center gap-2">
+        <img src="/images/logo2.png" alt="Logo" class="h-10">
+        <span class="text-indigo-600 font-bold text-xl hidden lg:block">Baby Essential</span>
+      </a>
+      <nav class="hidden md:flex gap-4">
+        <a href="/" class="text-gray-600 hover:text-indigo-600">Home</a>
+        <a href="/products" class="text-gray-600 hover:text-indigo-600">Products</a>
+      </nav>
+    </div>
+
+    <div class="flex-grow max-w-md mx-4">
+      <form id="searchForm" action="/products" method="GET" class="relative">
+        <div class="relative w-full max-w-md">
+          <input id="searchBar" type="text" name="search" placeholder="Search product by name..."
+            class="w-full border rounded-full px-4 py-2 pr-12 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition-all"
+            value="<%= typeof searchKeyword !== 'undefined' ? searchKeyword : '' %>">
+
+          <button type="submit"
+            class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-indigo-600 transition-colors">
+            <i class="pi pi-search text-lg"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <% if (typeof user!=='undefined' && user) {%>
+
+      <div class="flex items-center gap-4">
+        <a href="/cart" class="text-gray-600 hover:text-indigo-600 relative">
+          <i class="pi pi-shopping-cart text-xl"></i>
+        </a>
+
+        <a href="#" class="text-gray-600 hover:text-indigo-600 text-sm font-medium">Profile</a>
+        <a href="/orders" class="text-gray-600 hover:text-indigo-600 text-sm font-medium">Orders</a>
+
+        <form action="/auth/logout" method="POST" class="inline">
+          <button type="submit"
+            class="bg-slate-100 text-slate-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-slate-200 transition-colors">
+            Logout
+          </button>
+        </form>
+
+      </div>
+      <%} else {%>
+        <div class="flex items-center gap-4">
+          <a href="/auth/login" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm">Login</a>
+          <a href="/auth/register" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm">
+            Register
+          </a>
+        </div>
+        <%}%>
+  </div>
+</header>
+<div class="h-16"></div>

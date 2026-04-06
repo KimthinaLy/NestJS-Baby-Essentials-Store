@@ -1,0 +1,91 @@
+ <main class="container mx-auto px-4 py-12 mt-16">
+    <div class="max-w-4xl mx-auto">
+      
+      <div class="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+            Order #<%= order.order_id %>
+          </h1>
+          <p class="text-gray-500 text-sm mt-1">Placed on <%= new Date(order.order_date).toLocaleDateString() %></p>
+        </div>
+        
+        <div class="flex items-center gap-3">
+            <span class="px-4 py-2 rounded-2xl text-xs font-bold uppercase tracking-wider 
+                <%= order.order_status === 'COMPLETED' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700' %>">
+                <%= order.order_status %>
+            </span>
+        </div>
+      </div>
+
+      <div class="space-y-8">
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+          <div class="bg-indigo-50 px-8 py-4 border-b border-indigo-100">
+            <h2 class="text-lg font-bold text-indigo-900 flex items-center gap-2">
+              <i class="pi pi-map-marker"></i> Shipping Information
+            </h2>
+          </div>
+          <div class="p-8">
+            <div class="space-y-2 text-gray-700">
+              <p class="font-bold text-xl text-gray-900"><%= order.address.receiverName %></p>
+              <p class="flex items-center gap-2"><i class="pi pi-phone text-gray-400"></i> <%= order.address.phone %></p>
+              <p class="flex items-start gap-2 pt-2 text-gray-600">
+                <i class="pi pi-home mt-1 text-gray-400"></i>
+                <span>
+                  <%= order.address.street %>, <%= order.address.city %>,<br>
+                  <%= order.address.province %>, <%= order.address.postalCode %>
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
+          <div class="bg-slate-50 px-8 py-4 border-b border-slate-100">
+            <h2 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+              <i class="pi pi-shopping-bag"></i> Items Ordered
+            </h2>
+          </div>
+          <div class="p-8">
+            <div class="divide-y divide-slate-100">
+              <% order.items.forEach(item => { %>
+                <div class="flex items-center gap-6 py-6 first:pt-0 last:pb-0">
+                  <div class="w-20 h-20 bg-slate-100 rounded-2xl flex-shrink-0 overflow-hidden border border-slate-50">
+                    <img src="<%= item.product.displayImage %>" class="w-full h-full object-cover">
+                  </div>
+                  <div class="flex-grow">
+                    <h3 class="font-bold text-gray-900 text-lg"><%= item.product.name %></h3>
+                    <p class="text-gray-500">Quantity: <%= item.quantity %></p>
+                  </div>
+                  <div class="text-right">
+                    <p class="font-bold text-indigo-600 text-lg">$<%= (item.product.price * item.quantity).toFixed(2) %></p>
+                    <p class="text-xs text-gray-400">$<%= item.product.price %> each</p>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+
+            <div class="mt-8 pt-8 border-t-2 border-dashed border-slate-100 space-y-3">
+              <div class="flex justify-between text-gray-500">
+                <span>Subtotal</span>
+                <span>$<%= parseFloat(order.total_amount).toFixed(2) %></span>
+              </div>
+              <div class="flex justify-between text-gray-500">
+                <span>Shipping</span>
+                <span class="text-green-500 font-medium">FREE</span>
+              </div>
+              <div class="flex justify-between text-2xl font-black text-gray-900 pt-4">
+                <span>Total Paid</span>
+                <span class="text-indigo-600">$<%= parseFloat(order.total_amount).toFixed(2) %></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="text-center">
+            <button onclick="window.print()" class="inline-flex items-center gap-2 text-slate-400 hover:text-indigo-500 transition-colors font-medium">
+                <i class="pi pi-print"></i> Print Invoice
+            </button>
+        </div>
+      </div>
+    </div>
+  </main>
